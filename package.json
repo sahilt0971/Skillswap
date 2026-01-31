@@ -1,0 +1,18 @@
+{
+  "name": "skillswap-microservices",
+  "version": "1.0.0",
+  "description": "SkillSwap - A microservices-based skill exchange platform",
+  "scripts": {
+    "install-all": "npm install && cd services/user-service && npm install && cd ../skill-service && npm install && cd ../exchange-service && npm install && cd ../notification-service && npm install && cd ../api-gateway && npm install && cd ../../frontend && npm install",
+    "start:user": "cd services/user-service && npm start",
+    "start:skill": "cd services/skill-service && npm start",
+    "start:exchange": "cd services/exchange-service && npm start",
+    "start:notification": "cd services/notification-service && npm start",
+    "start:gateway": "cd services/api-gateway && npm start",
+    "start:frontend": "cd frontend && npm start"
+  },
+  "keywords": ["microservices", "skillswap", "nodejs"],
+  "author": "",
+  "license": "MIT"
+}
+

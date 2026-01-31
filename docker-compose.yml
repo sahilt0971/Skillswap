@@ -1,0 +1,109 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: skillswap-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: skillswap
+
+  user-service:
+    build:
+      context: ./services/user-service
+      dockerfile: Dockerfile
+    container_name: skillswap-user-service
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      MONGODB_URI: mongodb://mongodb:27017/skillswap-users
+      JWT_SECRET: your-secret-key-change-in-production
+    depends_on:
+      - mongodb
+
+  skill-service:
+    build:
+      context: ./services/skill-service
+      dockerfile: Dockerfile
+    container_name: skillswap-skill-service
+    ports:
+      - "3002:3002"
+    environment:
+      PORT: 3002
+      MONGODB_URI: mongodb://mongodb:27017/skillswap-skills
+    depends_on:
+      - mongodb
+
+  exchange-service:
+    build:
+      context: ./services/exchange-service
+      dockerfile: Dockerfile
+    container_name: skillswap-exchange-service
+    ports:
+      - "3003:3003"
+    environment:
+      PORT: 3003
+      MONGODB_URI: mongodb://mongodb:27017/skillswap-exchanges
+      NOTIFICATION_SERVICE_URL: http://notification-service:3004
+    depends_on:
+      - mongodb
+      - notification-service
+
+  notification-service:
+    build:
+      context: ./services/notification-service
+      dockerfile: Dockerfile
+    container_name: skillswap-notification-service
+    ports:
+      - "3004:3004"
+    environment:
+      PORT: 3004
+      MONGODB_URI: mongodb://mongodb:27017/skillswap-notifications
+    depends_on:
+      - mongodb
+
+  api-gateway:
+    build:
+      context: ./services/api-gateway
+      dockerfile: Dockerfile
+    container_name: skillswap-api-gateway
+    ports:
+      - "5000:5000"
+    environment:
+      PORT: 5000
+      USER_SERVICE_URL: http://user-service:3001
+      SKILL_SERVICE_URL: http://skill-service:3002
+      EXCHANGE_SERVICE_URL: http://exchange-service:3003
+      NOTIFICATION_SERVICE_URL: http://notification-service:3004
+    depends_on:
+      - user-service
+      - skill-service
+      - exchange-service
+      - notification-service
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: skillswap-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    stdin_open: true
+    tty: true
+    depends_on:
+      - api-gateway
+
+volumes:
+  mongodb_data:
+

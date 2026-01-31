@@ -1,0 +1,97 @@
+.skill-detail-page {
+  min-height: calc(100vh - 80px);
+  padding: 2rem 0;
+}
+
+.skill-detail-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.skill-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.skill-header h1 {
+  color: #333;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.skill-meta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.skill-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.skill-description h2,
+.skill-tags h3,
+.skill-owner h3,
+.request-section h3 {
+  color: #333;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.skill-description p {
+  color: #666;
+  line-height: 1.8;
+  font-size: 1.1rem;
+}
+
+.owner-info {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.owner-info p {
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.username {
+  color: #667eea !important;
+  font-weight: 600;
+}
+
+.bio {
+  color: #666 !important;
+  font-style: italic;
+  margin-top: 0.5rem;
+}
+
+.request-section {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.own-skill-notice,
+.login-prompt {
+  background: #fff3cd;
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #ffc107;
+}
+
+.login-prompt a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-prompt a:hover {
+  text-decoration: underline;
+}
+
