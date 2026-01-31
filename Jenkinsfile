@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs "node25"
+    }
+
     environment {
         REGISTRY = "docker.io"
         DOCKER_USER = "sahilll22"
