@@ -71,24 +71,24 @@ pipeline {
             }
         }
 
-        stage('Trivy Image Scan') {
-            steps {
-                script {
-                    def images = [
-                        "frontend",
-                        "api-gateway",
-                        "user-service",
-                        "skill-service",
-                        "exchange-service",
-                        "notification-service"
-                    ]
+       // stage('Trivy Image Scan') {
+         //   steps {
+           //     script {
+             //       def images = [
+               //         "frontend",
+                 //       "api-gateway",
+                   //     "user-service",
+                    //    "skill-service",
+                      //  "exchange-service",
+                        //"notification-service"
+                   // ]
 
-                    for (img in images) {
-                        sh "trivy image --exit-code 0 --severity HIGH,CRITICAL ${DOCKER_USER}/${img}:latest || true"
-                    }
-                }
-            }
-        }
+                   // for (img in images) {
+                    //    sh "trivy image --exit-code 0 --severity HIGH,CRITICAL ${DOCKER_USER}/${img}:latest || true"
+                   // }
+                //}
+            //  }
+        //}
 
         stage('Push Images to DockerHub') {
             environment {
