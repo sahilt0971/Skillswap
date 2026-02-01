@@ -1,8 +1,6 @@
 pipeline {
-    agent any
 
-    tools {
-    }
+    agent any
 
     environment {
         REGISTRY = "docker.io"
