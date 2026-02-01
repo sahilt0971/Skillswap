@@ -11,3 +11,5 @@ EXPOSE 3004
 
 CMD ["node", "server.js"]
 
+
+
