@@ -2,9 +2,6 @@ pipeline {
     agent any
 
     tools {
-        // Ensure "node22" or "node18" is configured in Manage Jenkins -> Tools
-        // Node 25 requires libatomic1 installed on the OS.
-        nodejs "node22" 
     }
 
     environment {
@@ -21,18 +18,21 @@ pipeline {
             }
         }
 
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm run install-all'
+            }
+        }
+
         stage('Run Unit Tests') {
             parallel {
                 stage('Frontend Tests') {
                     steps {
                         dir('frontend') {
-                            sh 'npm install'
-                            // --passWithNoTests prevents failure if you haven't written tests yet
                             sh 'npm test -- --watchAll=false --passWithNoTests || true'
                         }
                     }
                 }
-
                 stage('Backend Tests') {
                     steps {
                         script {
@@ -43,10 +43,8 @@ pipeline {
                                 "exchange-service",
                                 "notification-service"
                             ]
-
                             for (s in services) {
                                 dir("services/${s}") {
-                                    sh 'npm install'
                                     sh 'npm test || true'
                                 }
                             }
@@ -56,15 +54,13 @@ pipeline {
             }
         }
 
-        stage('SonarQube Scan') {
+        stage('SonarQube Analysis') {
             environment {
                 SONAR_TOKEN = credentials('sonar-cred')
             }
-            steps { 
+            steps {
                 script {
-                    // This pulls the path from your Jenkins Global Tool Config
                     def scannerHome = tool 'sonar-scanner'
-                    
                     withSonarQubeEnv('sonar-server') {
                         sh """
                         ${scannerHome}/bin/sonar-scanner \
@@ -81,7 +77,6 @@ pipeline {
 
         stage('Build Docker Images') {
             steps {
-                // Ensure the 'jenkins' user is in the 'docker' group on the server
                 sh 'docker compose build'
             }
         }
@@ -98,7 +93,7 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy (Docker Compose)') {
             steps {
                 sh 'docker compose up -d'
             }
